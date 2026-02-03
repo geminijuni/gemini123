@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Pernikahan Sakura - B & C</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=Montserrat:wght@200;400;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --sakura-pink: #ffd1dc;
+            --sakura-dark: #ffb7c5;
+            --text-grey: #4a4a4a;
+            --white: #ffffff;
+        }
+
+        body {
+            background-color: #fff9fa;
+            color: var(--text-grey);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .font-serif { font-family: 'Cormorant Garamond', serif; }
+        .font-script { font-family: 'Pinyon Script', cursive; }
+
+        /* Sakura Falling Animation */
+        .sakura-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .petal {
+            position: absolute;
+            background-color: var(--sakura-pink);
+            border-radius: 150% 0 150% 0;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) translateX(100px) rotate(360deg); opacity: 0; }
+        }
+
+        /* Cover Styles */
+        #cover {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #fff9fa 0%, #ffe4e9 100%);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+        .cover-open { transform: translateY(-100%); }
+
+        /* Japanese Style Accents */
+        .japanese-frame {
+            border: 1px solid var(--sakura-dark);
+            padding: 20px;
+            position: relative;
+        }
+        .japanese-frame::before {
+            content: "";
+            position: absolute;
+            top: -5px; left: -5px; right: -5px; bottom: -5px;
+            border: 1px solid var(--sakura-pink);
+            pointer-events: none;
+        }
+
+        /* Buttons */
+        .btn-sakura {
+            background: var(--sakura-dark);
+            color: white;
+            padding: 14px 30px;
+            border-radius: 30px;
+            font-size: 14px;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 15px rgba(255, 183, 197, 0.4);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .btn-sakura:hover {
+            background: #ff9fb2;
+            transform: translateY(-2px);
+        }
+
+        .max-mobile {
+            max-width: 450px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 50px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .hero-bg {
+            background-image: url('https://images.unsplash.com/photo-1522383225653-ed111181a951?w=800');
+            background-size: cover;
+            background-position: center;
+            height: 60vh;
+            position: relative;
+        }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent, white);
+        }
+
+        /* Music Toggle */
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        /* Countdown Card */
+        .countdown-item {
+            background: white;
+            border: 1px solid #ffe4e9;
+            padding: 10px;
+            border-radius: 12px;
+            min-width: 70px;
+        }
+
+        /* Gift Card */
+        .gift-card {
+            background: linear-gradient(135deg, #ffffff 0%, #fff0f3 100%);
+            border-radius: 20px;
+            border: 1px solid #ffd1dc;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        .gift-card::after {
+            content: "\f004";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            right: -20px;
+            bottom: -20px;
+            font-size: 100px;
+            color: #ffd1dc;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Falling Petals -->
+    <div class="sakura-container" id="sakura-box"></div>
+
+    <!-- Music Control -->
+    <div class="music-control" onclick="toggleMusic()">
+        <i id="music-icon" class="fas fa-music text-pink-400"></i>
+    </div>
+
+    <!-- Cover Section -->
+    <div id="cover">
+        <div class="text-center px-10">
+            <div class="mb-6" data-aos="fade-down">
+                <img src="https://cdn-icons-png.flaticon.com/512/1694/1694383.png" class="w-16 mx-auto opacity-60" alt="Sakura Icon">
+            </div>
+            <p class="font-serif italic text-lg text-pink-400 mb-2">The Wedding of</p>
+            <h1 class="font-script text-7xl text-pink-500 mb-8">Bela & Candra</h1>
+            
+            <div class="japanese-frame inline-block mb-10" data-aos="zoom-in">
+                <p class="text-[10px] tracking-[0.3em] uppercase text-gray-500 mb-1">Kepada Bapak/Ibu/Saudara/i</p>
+                <h3 id="guest-name" class="text-xl font-serif font-bold text-gray-700">Tamu Undangan</h3>
+            </div>
+            
+            <br>
+            <button onclick="openInv()" class="btn-sakura font-bold uppercase tracking-widest">Buka Undangan</button>
+        </div>
+    </div>
+
+    <!-- Audio -->
+    <audio id="bgm" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="max-mobile">
+        
+        <!-- Hero Section -->
+        <section id="hero">
+            <div class="hero-bg">
+                <div class="hero-overlay"></div>
+            </div>
+            <div class="px-8 -mt-20 relative z-10 text-center">
+                <p class="font-serif italic text-2xl text-pink-400">Save the Date</p>
+                <h2 class="font-serif text-5xl font-light my-4 tracking-tighter text-gray-800 uppercase">25 Oktober 2026</h2>
+                
+                <!-- Countdown -->
+                <div class="flex justify-center gap-2 mt-8 mb-4" id="countdown">
+                    <div class="countdown-item">
+                        <span id="days" class="block text-2xl font-bold text-pink-500">00</span>
+                        <span class="text-[9px] uppercase tracking-widest text-gray-400">Hari</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="hours" class="block text-2xl font-bold text-pink-500">00</span>
+                        <span class="text-[9px] uppercase tracking-widest text-gray-400">Jam</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="minutes" class="block text-2xl font-bold text-pink-500">00</span>
+                        <span class="text-[9px] uppercase tracking-widest text-gray-400">Menit</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="seconds" class="block text-2xl font-bold text-pink-500">00</span>
+                        <span class="text-[9px] uppercase tracking-widest text-gray-400">Detik</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-center gap-4 text-xs tracking-widest text-gray-400 font-light mt-6">
+                    <span>SABTU</span>
+                    <span>•</span>
+                    <span>JAKARTA</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quotes -->
+        <section class="px-8 py-20 text-center">
+            <div data-aos="fade-up">
+                <img src="https://cdn-icons-png.flaticon.com/512/2913/2913474.png" class="w-8 mx-auto mb-6 opacity-30" alt="Sakura Divider">
+                <p class="font-serif italic text-xl leading-relaxed text-gray-500">
+                    "Cinta itu seperti bunga sakura; indah, berharga, dan mekar dengan penuh harapan."
+                </p>
+            </div>
+        </section>
+
+        <!-- Couple Section -->
+        <section id="couple" class="px-8 py-10 bg-[#fff5f7]">
+            <div class="space-y-20">
+                <div class="text-center" data-aos="fade-right">
+                    <div class="w-48 h-48 mx-auto rounded-full border-4 border-white shadow-lg overflow-hidden mb-6">
+                        <img src="foto (1).jpg" class="w-full h-full object-cover" alt="Mempelai Pria">
+                    </div>
+                    <h3 class="font-script text-4xl text-pink-500 mb-2">Candra Wijaya, S.T.</h3>
+                    <p class="text-xs font-bold tracking-widest text-gray-400 mb-4 uppercase">Putra dari</p>
+                    <p class="text-sm font-serif">Bpk. Wijaya Kusuma & Ibu Ratna Sari</p>
+                </div>
+
+                <div class="flex justify-center py-4">
+                    <span class="font-script text-5xl text-pink-300">&</span>
+                </div>
+
+                <div class="text-center" data-aos="fade-left">
+                    <div class="w-48 h-48 mx-auto rounded-full border-4 border-white shadow-lg overflow-hidden mb-6">
+                        <img src="foto (2).jpg" class="w-full h-full object-cover" alt="Mempelai Wanita">
+                    </div>
+                    <h3 class="font-script text-4xl text-pink-500 mb-2">Bela Adelia, S.E.</h3>
+                    <p class="text-xs font-bold tracking-widest text-gray-400 mb-4 uppercase">Putri dari</p>
+                    <p class="text-sm font-serif">Bpk. Adeliawan & Ibu Setyawati</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Event Section -->
+        <section id="event" class="px-8 py-20 text-center">
+            <h2 class="font-serif text-4xl text-gray-800 mb-12">Rangkaian Acara</h2>
+            
+            <div class="bg-white p-8 border border-pink-100 shadow-sm rounded-2xl mb-8" data-aos="flip-up">
+                <h4 class="font-serif text-2xl text-pink-500 mb-4">Akad Nikah</h4>
+                <p class="text-sm font-bold text-gray-600 mb-2">09.00 - 10.30 WIB</p>
+                <p class="text-xs text-gray-500 leading-relaxed mb-6">
+                    Masjid Agung Al-Barkah<br>
+                    Jl. Veteran No. 1, Jakarta Pusat
+                </p>
+                <a href="https://maps.google.com" target="_blank" class="inline-block text-[10px] font-bold tracking-widest text-pink-400 border border-pink-100 px-6 py-2 rounded-full">BUKA GOOGLE MAPS</a>
+            </div>
+
+            <div class="bg-white p-8 border border-pink-100 shadow-sm rounded-2xl" data-aos="flip-up" data-aos-delay="200">
+                <h4 class="font-serif text-2xl text-pink-500 mb-4">Resepsi Pernikahan</h4>
+                <p class="text-sm font-bold text-gray-600 mb-2">11.30 - 13.00 WIB</p>
+                <p class="text-xs text-gray-500 leading-relaxed mb-6">
+                    Gedung Kridha Bhakti<br>
+                    Jakarta Selatan
+                </p>
+                <a href="https://maps.google.com" target="_blank" class="inline-block text-[10px] font-bold tracking-widest text-pink-400 border border-pink-100 px-6 py-2 rounded-full">BUKA GOOGLE MAPS</a>
+            </div>
+        </section>
+
+        <!-- Wedding Gift Section -->
+        <section id="gift" class="px-8 py-20 bg-[#fff9fa] text-center">
+            <h2 class="font-serif text-3xl text-gray-800 mb-4">Wedding Gift</h2>
+            <p class="text-xs text-gray-500 mb-10 leading-relaxed">Kehadiran Anda adalah kado terindah, namun jika Anda ingin memberikan tanda kasih, silakan melalui saluran berikut:</p>
+            
+            <div class="space-y-6">
+                <!-- Card Bank 1 -->
+                <div class="gift-card text-left" data-aos="fade-up">
+                    <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-4">Transfer Bank BCA</p>
+                    <p id="acc-1" class="text-xl font-bold text-gray-700 tracking-wider mb-1">7720 1928 33</p>
+                    <p class="text-sm text-gray-500 mb-4 uppercase">a.n Bela Adelia</p>
+                    <button onclick="copyToClipboard('7720 1928 33')" class="text-[10px] font-bold bg-pink-100 text-pink-500 px-4 py-2 rounded-lg hover:bg-pink-200 transition">SALIN NO. REKENING</button>
+                </div>
+
+                <!-- Card Bank 2 -->
+                <div class="gift-card text-left" data-aos="fade-up" data-aos-delay="100">
+                    <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-4">Transfer Bank Mandiri</p>
+                    <p id="acc-2" class="text-xl font-bold text-gray-700 tracking-wider mb-1">112 00 2233 4455</p>
+                    <p class="text-sm text-gray-500 mb-4 uppercase">a.n Candra Wijaya</p>
+                    <button onclick="copyToClipboard('112 00 2233 4455')" class="text-[10px] font-bold bg-pink-100 text-pink-500 px-4 py-2 rounded-lg hover:bg-pink-200 transition">SALIN NO. REKENING</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery -->
+        <section id="gallery" class="px-4 py-20 bg-pink-50">
+            <h2 class="font-serif text-3xl text-center mb-10">Momen Indah</h2>
+            <div class="grid grid-cols-2 gap-3">
+                <img src="foto (4).jpg" class="rounded-lg shadow-md" data-aos="zoom-in">
+                <img src="foto (5).jpg" class="rounded-lg shadow-md" data-aos="zoom-in" data-aos-delay="100">
+                <img src="foto (6).jpg" class="rounded-lg shadow-md col-span-2" data-aos="zoom-in" data-aos-delay="200">
+            </div>
+        </section>
+
+        <!-- RSVP & Wishes to WhatsApp -->
+        <section class="px-8 py-20 text-center">
+            <h2 class="font-serif text-3xl mb-4">Kirim Ucapan</h2>
+            <p class="text-[10px] text-gray-400 uppercase tracking-[0.2em] mb-8">Pesan akan dikirim langsung ke WhatsApp</p>
+            <div class="space-y-4">
+                <input type="text" id="wa-name" placeholder="Nama Anda" class="w-full bg-pink-50 border-none rounded-xl p-4 text-sm outline-none focus:ring-1 focus:ring-pink-300">
+                <textarea id="wa-message" placeholder="Pesan ucapan dan doa untuk mempelai..." rows="4" class="w-full bg-pink-50 border-none rounded-xl p-4 text-sm outline-none focus:ring-1 focus:ring-pink-300"></textarea>
+                <button onclick="sendToWA()" class="btn-sakura w-full font-bold">KIRIM KE WHATSAPP <i class="fab fa-whatsapp ml-2"></i></button>
+            </div>
+        </section>
+
+        <footer class="py-20 text-center border-t border-pink-50">
+            <h2 class="font-script text-4xl text-pink-400 mb-4">Bela & Candra</h2>
+            <p class="text-[10px] tracking-[0.4em] text-gray-300 uppercase">Sakura Blossom Invitation</p>
+        </footer>
+
+    </div>
+
+    <!-- Alert Copy -->
+    <div id="copy-alert" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[10px] px-6 py-2 rounded-full opacity-0 transition-opacity z-[3000]">Nomor Rekening Disalin!</div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1200, once: true });
+
+        // Countdown Logic
+        const targetDate = new Date("Oct 25, 2026 09:00:00").getTime();
+        
+        setInterval(function() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
+            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+        }, 1000);
+
+        // WhatsApp Integration
+        function sendToWA() {
+            const name = document.getElementById('wa-name').value;
+            const message = document.getElementById('wa-message').value;
+            const phone = "6281234567890"; // GANTI DENGAN NOMOR WHATSAPP ANDA
+
+            if (name && message) {
+                const text = `Halo Bela & Candra!\n\nSaya *${name}* ingin mengirimkan ucapan:\n"${message}"\n\nSemoga menjadi keluarga sakinah, mawaddah, warahmah. Amin!`;
+                const encodedText = encodeURIComponent(text);
+                window.open(`https://wa.me/${phone}?text=${encodedText}`, '_blank');
+            } else {
+                alert("Mohon isi nama dan pesan Anda terlebih dahulu.");
+            }
+        }
+
+        // Copy Clipboard
+        function copyToClipboard(text) {
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            const alert = document.getElementById('copy-alert');
+            alert.style.opacity = '1';
+            setTimeout(() => { alert.style.opacity = '0'; }, 2000);
+        }
+
+        // Create Petals
+        const sakuraBox = document.getElementById('sakura-box');
+        for (let i = 0; i < 20; i++) {
+            createPetal();
+        }
+
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            const size = Math.random() * 10 + 10 + 'px';
+            petal.style.width = size;
+            petal.style.height = size;
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.animationDuration = Math.random() * 5 + 5 + 's';
+            petal.style.animationDelay = Math.random() * 5 + 's';
+            sakuraBox.appendChild(petal);
+        }
+
+        const bgm = document.getElementById('bgm');
+        let isPlaying = false;
+
+        function openInv() {
+            document.getElementById('cover').classList.add('cover-open');
+            bgm.play().catch(e => console.log("Audio play failed"));
+            isPlaying = true;
+            setTimeout(() => { AOS.refresh(); }, 600);
+        }
+
+        function toggleMusic() {
+            const icon = document.getElementById('music-icon');
+            if (isPlaying) {
+                bgm.pause();
+                icon.classList.remove('fa-music');
+                icon.classList.add('fa-pause');
+            } else {
+                bgm.play();
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-music');
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Set Guest Name
+        const urlParams = new URLSearchParams(window.location.search);
+        const guest = urlParams.get('to');
+        if(guest) document.getElementById('guest-name').innerText = guest;
+    </script>
+</body>
+</html>
